@@ -1,7 +1,5 @@
-package com.example.inventariogalpao.Galpao.service;
+package com.example.inventariogalpao.Galpao;
 
-import com.example.inventariogalpao.Galpao.model.Galpao;
-import com.example.inventariogalpao.Galpao.repository.GalpaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,29 +68,37 @@ public class GalpaoService {
 
     // Método para deletar um galpão
     public Galpao deletarGalpao(String id) {
-        // Procura o galpão no banco de dados usando o ID
+        // Procura o galpão no banco de dados
         Galpao galpaoExistente = galpaoRepository.findById(id).orElse(null);
 
-        // Se o galpão não existir, lança uma exceção
+        // Se o galpão não existir, lança uma exceção de galpão não encontrado
         if (galpaoExistente == null) {
-            throw new RuntimeException("Item não cadastrado");
+            throw new RuntimeException("Galpão não cadastrado");
         }
 
         // Deleta o galpão do banco de dados
         galpaoRepository.delete(galpaoExistente);
+
         return galpaoExistente;
     }
 
     // Método para listar todos os galpões
     public List<Galpao> listarGalpoes() {
-        // Retorna todos os galpões do banco de dados
+        // Retorna todos os galpões
         return galpaoRepository.findAll();
     }
 
-    // Método para encontrar um galpão pelo ID
+    // Método para encontrar um galpão pelo id
     public Galpao encontrarGalpao(String id) {
-        // Procura o galpão no banco de dados usando o ID
-        return galpaoRepository.findById(id).orElse(null);
-    }
+        // Procura o galpão no banco de dados
+        Galpao galpaoExistente = galpaoRepository.findById(id).orElse(null);
 
+        // Se o galpão não existir, lança uma exceção de galpão não encontrado
+        if (galpaoExistente == null) {
+            throw new RuntimeException("Galpão não cadastrado");
+        }
+
+        return galpaoExistente;
+    }
 }
+

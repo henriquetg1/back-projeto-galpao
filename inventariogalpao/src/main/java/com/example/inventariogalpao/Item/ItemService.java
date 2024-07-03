@@ -1,8 +1,6 @@
-package com.example.inventariogalpao.Item.service;
+package com.example.inventariogalpao.Item;
 
-import com.example.inventariogalpao.Item.model.Item;
-import com.example.inventariogalpao.Item.repository.ItemRepository;
-import com.example.inventariogalpao.Setor.repository.SetorRepository;
+import com.example.inventariogalpao.Setor.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

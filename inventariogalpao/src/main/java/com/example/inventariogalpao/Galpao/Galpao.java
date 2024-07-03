@@ -1,4 +1,4 @@
-package com.example.inventariogalpao.Galpao.model;
+package com.example.inventariogalpao.Galpao;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;

@@ -1,6 +1,5 @@
-package com.example.inventariogalpao.Item.repository;
+package com.example.inventariogalpao.Item;
 
-import com.example.inventariogalpao.Item.model.Item;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

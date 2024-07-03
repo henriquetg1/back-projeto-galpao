@@ -1,7 +1,5 @@
-package com.example.inventariogalpao.Item.controller;
+package com.example.inventariogalpao.Item;
 
-import com.example.inventariogalpao.Item.model.Item;
-import com.example.inventariogalpao.Item.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,5 @@
-package com.example.inventariogalpao.Galpao.controller;
+package com.example.inventariogalpao.Galpao;
 
-import com.example.inventariogalpao.Galpao.model.Galpao;
-import com.example.inventariogalpao.Galpao.service.GalpaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +10,12 @@ import java.util.List;
 public class GalpaoController {
     @Autowired
     private GalpaoService galpaoService;
+
+    // Método para cadastrar um novo galpão
+    @PostMapping
+    public Galpao cadastrarGalpao(@RequestBody Galpao galpao) {
+        return galpaoService.cadastrarGalpao(galpao);
+    }
 
     // Método para listar todos os galpões
     @GetMapping
@@ -25,12 +29,6 @@ public class GalpaoController {
         return galpaoService.encontrarGalpao(id);
     }
 
-    // Método para cadastrar um novo galpão
-    @PostMapping
-    public Galpao cadastrarGalpao(@RequestBody Galpao galpao) {
-        return galpaoService.cadastrarGalpao(galpao);
-    }
-
     // Método para deletar um galpão
     @DeleteMapping("/{id}")
     public Galpao deletarGalpao(@PathVariable String id) {
@@ -42,5 +40,5 @@ public class GalpaoController {
     public Galpao atualizarGalpao(@RequestBody Galpao galpao, @PathVariable String id) {
         return galpaoService.atualizarGalpao(id, galpao.getNome(), galpao.getEndereco());
     }
-
 }
+
