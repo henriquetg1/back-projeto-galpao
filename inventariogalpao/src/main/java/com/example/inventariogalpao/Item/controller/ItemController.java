@@ -26,8 +26,8 @@ public class ItemController {
 
     @PostMapping
     // Método para cadastrar um novo item
-    public Item cadastrarItem(@RequestBody Item beneficio) {
-        return itemService.cadastrarItem(beneficio);
+    public Item cadastrarItem(@RequestBody Item item) {
+        return itemService.cadastrarItem(item);
     }
 
     @DeleteMapping("/{id}")

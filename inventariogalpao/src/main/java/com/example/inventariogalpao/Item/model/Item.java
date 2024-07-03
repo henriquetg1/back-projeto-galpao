@@ -3,7 +3,7 @@ package com.example.inventariogalpao.Item.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-@Document(collection = "itens")
+@Document(collection = "galpoes")
 public class Item {
     @MongoId
     private String id;
