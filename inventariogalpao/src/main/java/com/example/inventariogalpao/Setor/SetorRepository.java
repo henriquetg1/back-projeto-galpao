@@ -1,6 +1,5 @@
-package com.example.inventariogalpao.Setor.repository;
+package com.example.inventariogalpao.Setor;
 
-import com.example.inventariogalpao.Setor.model.Setor;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface SetorRepository extends MongoRepository<Setor, String> {

@@ -1,9 +1,7 @@
-package com.example.inventariogalpao.Setor.service;
+package com.example.inventariogalpao.Setor;
 
-import com.example.inventariogalpao.Item.model.Item;
-import com.example.inventariogalpao.Item.repository.ItemRepository;
-import com.example.inventariogalpao.Setor.model.Setor;
-import com.example.inventariogalpao.Setor.repository.SetorRepository;
+import com.example.inventariogalpao.Item.Item;
+import com.example.inventariogalpao.Item.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +67,40 @@ public class SetorService {
         return setorExistente;
     }
 
+    // Método para atualizar um setor
+    public Setor atualizarSetor(String id, String setor) {
+        // Procura o setor no banco de dados
+        Setor setorExistente = setorRepository.findById(id).orElse(null);
 
+        // Se o setor não existir, lança uma exceção
+        if (setorExistente == null) {
+            throw new RuntimeException("Setor não encontrado");
+        }
+
+        // Verifica se o setor está vazio
+        if (setor.isEmpty() || setor == null) {
+            throw new RuntimeException("Setor não pode ser vazio");
+        }
+
+        // Atualiza o setor
+        setorExistente.setSetor(setor);
+
+        // Salva o setor no banco de dados
+        return setorRepository.save(setorExistente);
+    }
+
+    // Método para listar todos os itens de um setor
+    public List<Item> listarItensSetor(String id) {
+        // Procura o setor no banco de dados
+        Setor setorExistente = setorRepository.findById(id).orElse(null);
+
+        // Se o setor não existir, lança uma exceção
+        if (setorExistente == null) {
+            throw new RuntimeException("Setor não encontrado");
+        }
+
+        // Retorna todos os itens associados ao setor
+        return itemRepository.findBySetor(setorExistente.getSetor());
+    }
 
 }

@@ -1,7 +1,5 @@
-package com.example.inventariogalpao.Setor.controller;
+package com.example.inventariogalpao.Setor;
 
-import com.example.inventariogalpao.Setor.model.Setor;
-import com.example.inventariogalpao.Setor.service.SetorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +28,11 @@ public class SetorController {
     @DeleteMapping("/{id}")
     public Setor deletarSetor(@PathVariable String id ) {
         return setorService.deletarSetor(id);
+    }
+
+    // Método para atualizar um setor
+    @PutMapping("/{id}")
+    public Setor atualizarSetor(@RequestBody Setor setor, @PathVariable String id) {
+        return setorService.atualizarSetor(id, setor.getSetor());
     }
 }
