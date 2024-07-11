@@ -1,29 +1,34 @@
 package com.example.inventariogalpao.Item;
 
 import com.example.inventariogalpao.Galpao.Galpao;
+import com.example.inventariogalpao.Setor.Setor;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-@Document(collection = "galpoes")
+@Document(collection = "itens")
 public class Item {
     @MongoId
     private String id;
     private String nome;
-    private String setor; // Refere-se ao setor do galpão (ferramentas, eletrônicos, etc)
-    private String posicao; // Refere-se a posição do item no galpão (prateleira A1, A2, B1, etc)
+    private String posicao;
     private Integer quantidade;
-    // Um item faz parte de um galpão, então poderíamos ter um atributo do tipo Galpao aqui
+
+    @DBRef
     private Galpao galpao;
+
+    @DBRef
+    private Setor setor;
 
     public Item() {
     }
 
-    public Item(String nome, String setor, String posicao, Integer quantidade, Galpao galpao) {
+    public Item(String nome, String posicao, Integer quantidade, Galpao galpao, Setor setor) {
         this.nome = nome;
-        this.setor = setor;
         this.posicao = posicao;
         this.quantidade = quantidade;
         this.galpao = galpao;
+        this.setor = setor;
     }
 
     public String getId() {
@@ -40,14 +45,6 @@ public class Item {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getSetor() {
-        return setor;
-    }
-
-    public void setSetor(String setor) {
-        this.setor = setor;
     }
 
     public String getPosicao() {
@@ -72,5 +69,13 @@ public class Item {
 
     public void setGalpao(Galpao galpao) {
         this.galpao = galpao;
+    }
+
+    public Setor getSetor() {
+        return setor;
+    }
+
+    public void setSetor(Setor setor) {
+        this.setor = setor;
     }
 }

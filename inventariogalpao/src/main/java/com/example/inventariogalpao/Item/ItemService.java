@@ -1,5 +1,8 @@
 package com.example.inventariogalpao.Item;
 
+import com.example.inventariogalpao.Galpao.Galpao;
+import com.example.inventariogalpao.Galpao.GalpaoRepository;
+import com.example.inventariogalpao.Setor.Setor;
 import com.example.inventariogalpao.Setor.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,96 +17,64 @@ public class ItemService {
     @Autowired
     private SetorRepository setorRepository;
 
+    @Autowired
+    private GalpaoRepository galpaoRepository;
+
     public ItemService(ItemRepository itemRepository, SetorRepository setorRepository) {
         this.itemRepository = itemRepository;
         this.setorRepository = setorRepository;
     }
 
     // Método para cadastrar um novo item
-    public Item cadastrarItem(Item item) {
-        // Procura o item no banco de dados
-        Item itemExistente = itemRepository.findByNome(item.getNome());
+    public Item cadastrarItem(Item item, String setorId) {
+        // Procura o setor no banco de dados
+        Setor setor = setorRepository.findById(setorId).orElse(null);
 
-        // Se o item existir, lança uma exceção de item já cadastrado
+        // Se o setor não existir, lança uma exceção
+        if (setor == null) {
+            throw new RuntimeException("Setor não encontrado");
+        }
+
+        // Verifica se o item está vazio
+        if (item.getNome().isEmpty() || item.getNome() == null) {
+            throw new RuntimeException("Item não pode ser vazio");
+        }
+
+        // Verifica se o item já existe no setor
+        Item itemExistente = itemRepository.findByNomeAndSetorId(item.getNome(), setorId);
         if (itemExistente != null) {
-            throw new RuntimeException("Item já cadastrado");
+            throw new RuntimeException("Item já cadastrado no setor");
         }
 
-        // Verifica se o setor está presente
-        if (item.getSetor().equals("") || item.getSetor() == null) {
-            throw new RuntimeException("Setor não pode ser vazio");
-        }
-
-        // Verifica se o setor existe no banco de dados de setores
-        if (setorRepository.findBySetor(item.getSetor()) == null) {
-            throw new RuntimeException("Setor não cadastrado");
-        }
-
-        // Verifica se a posição está presente
-        if (item.getPosicao().equals("") || item.getPosicao() == null) {
-            throw new RuntimeException("Posição não pode ser vazia");
-        }
-
-        // Verifica se a quantidade está presente
-        if (item.getQuantidade() == null) {
-            throw new RuntimeException("Quantidade não pode ser vazia");
-        }
-
-        // Verifica se a quantidade é menor que 0
+        // Quantidade só pode ser números positivos
         if (item.getQuantidade() < 0) {
-            throw new RuntimeException("Quantidade não pode ser menor que 0");
+            throw new RuntimeException("Quantidade não pode ser negativa");
         }
+
+        // Associa o item ao setor e ao galpão
+        item.setSetor(setor);
+        item.setGalpao(setor.getGalpao());
 
         // Salva o item no banco de dados
         return itemRepository.save(item);
     }
 
     // Método para atualizar um item
-    public Item atualizarItem(String id, String nome, String setor, String posicao, Integer quantidade) {
+    public Item atualizarItem(String id, String nome, String posicao, Integer quantidade) {
         // Procura o item no banco de dados
         Item itemExistente = itemRepository.findById(id).orElse(null);
 
-        // Se o item não existir, lança uma exceção de item não encontrado
+        // Se o item não existir, lança uma exceção
         if (itemExistente == null) {
             throw new RuntimeException("Item não cadastrado");
         }
 
-        // Verifica se o nome do item está vazio
-        if (nome.equals("") || nome == null) {
-            throw new RuntimeException("Nome do item não pode ser vazio");
-        }
-
-        // Verifica se o setor existe no banco de dados de setores
-        if (setorRepository.findBySetor(setor) == null) {
-            throw new RuntimeException("Setor não cadastrado");
-        }
-
-        // Verifica se o setor está vazio
-        if (setor.equals("") || setor == null) {
-            throw new RuntimeException("Setor não pode ser vazio");
-        }
-
-        // Verifica se a posição está vazia
-        if (posicao.equals("") || posicao == null) {
-            throw new RuntimeException("Posição não pode ser vazia");
-        }
-
-        // Verifica se a quantidade está vazia
-        if (quantidade == null) {
-            throw new RuntimeException("Quantidade não pode ser vazia");
-        }
-
-        // Verifica se a quantidade é menor que 0
-        if (quantidade < 0) {
-            throw new RuntimeException("Quantidade não pode ser menor que 0");
-        }
-
-        // Atualiza o item no banco de dados
+        // Atualiza os dados do item
         itemExistente.setNome(nome);
-        itemExistente.setSetor(setor);
         itemExistente.setPosicao(posicao);
         itemExistente.setQuantidade(quantidade);
 
+        // Salva o item atualizado no banco de dados
         return itemRepository.save(itemExistente);
     }
 
@@ -122,14 +93,32 @@ public class ItemService {
         return itemExistente;
     }
 
-    // Método para listar todos os itens ou itens de um setor específico
-    public List<Item> listarItens(String setor) {
-        // Se o setor não for vazio, retorna todos os itens relacionados à esse setor
-        if (setor != null) {
-            return itemRepository.findBySetor(setor);
+    // Método para listar todos os itens de um setor específico
+    public List<Item> listarItens(String setorId) {
+        // Procura o setor no banco de dados
+        Setor setor = setorRepository.findById(setorId).orElse(null);
+
+        // Se o setor não existir, lança uma exceção
+        if (setor == null) {
+            throw new RuntimeException("Setor não encontrado");
         }
-        // Se o setor for vazio, retorna todos os itens
-        return itemRepository.findAll();
+
+        // Retorna todos os itens associados ao setor
+        return itemRepository.findBySetorId(setorId);
+    }
+
+    // Método para listar todos os itens de um galpão
+    public List<Item> listarItensGalpao(String galpaoId) {
+        // Procura o galpão no banco de dados
+        Galpao galpao = galpaoRepository.findById(galpaoId).orElse(null);
+
+        // Se o galpão não existir, lança uma exceção
+        if (galpao == null) {
+            throw new RuntimeException("Galpão não encontrado");
+        }
+
+        // Retorna todos os itens associados ao galpão
+        return itemRepository.findByGalpaoId(galpaoId);
     }
 
     // Método para encontrar um item pelo ID
@@ -137,5 +126,4 @@ public class ItemService {
         // Procura o item no banco de dados usando o ID
         return itemRepository.findById(id).orElse(null);
     }
-
 }

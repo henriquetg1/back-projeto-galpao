@@ -4,40 +4,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/itens")
 public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    // Método para listar todos os itens
-    @GetMapping
-    public List<Item> listarItens(@RequestParam(required = false) String setor) {
-        return itemService.listarItens(setor);
+    // Método para listar todos os itens de um galpão
+    @GetMapping("/galpao/{galpaoId}")
+    public List<Item> listarItensGalpao(@PathVariable String galpaoId) {
+        return itemService.listarItensGalpao(galpaoId);
     }
 
-    @GetMapping("/{id}")
+    // Método para listar todos os itens de um setor específico
+    @GetMapping("/setor/{setorId}")
+    public List<Item> listarItens(@PathVariable String setorId) {
+        return itemService.listarItens(setorId);
+    }
+
     // Método para encontrar um item pelo id
-    public Item encontrarItem(@PathVariable String id) {
-        return itemService.encontrarItem(id);
+    @GetMapping("/{itemId}")
+    public Item encontrarItem(@PathVariable String itemId) {
+        return itemService.encontrarItem(itemId);
     }
 
-    @PostMapping
-    // Método para cadastrar um novo item
-    public Item cadastrarItem(@RequestBody Item item) {
-        return itemService.cadastrarItem(item);
+    // Método para cadastrar um novo item em um setor específico
+    @PostMapping("/setor/{setorId}")
+    public Item cadastrarItem(@RequestBody Item item, @PathVariable String setorId) {
+        return itemService.cadastrarItem(item, setorId);
     }
 
-    @DeleteMapping("/{id}")
     // Método para deletar um item
-    public Item deletarItem(@PathVariable String id) {
-        return itemService.deletarItem(id);
+    @DeleteMapping("/{itemId}")
+    public Item deletarItem(@PathVariable String itemId) {
+        return itemService.deletarItem(itemId);
     }
 
-    @PutMapping("/{id}")
     // Método para atualizar um item
-    public Item atualizarItem(@RequestBody Item item, @PathVariable String id) {
-        return itemService.atualizarItem(id, item.getSetor(), item.getNome(), item.getPosicao(), item.getQuantidade());
+    @PutMapping("/editar/{itemId}")
+    public Item atualizarItem(@RequestBody Item item, @PathVariable String itemId) {
+        return itemService.atualizarItem(itemId, item.getNome(), item.getPosicao(), item.getQuantidade());
     }
-
 }

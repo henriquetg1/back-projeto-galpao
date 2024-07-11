@@ -1,5 +1,7 @@
 package com.example.inventariogalpao.Setor;
 
+import com.example.inventariogalpao.Galpao.Galpao;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -7,13 +9,17 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 public class Setor {
     @MongoId
     private String id;
-    private String setor;
+    private String nome;
+
+    @DBRef
+    private Galpao galpao;
 
     public Setor() {
     }
 
-    public Setor(String setor) {
-        this.setor = setor;
+    public Setor(String nome, Galpao galpao) {
+        this.nome = nome;
+        this.galpao = galpao;
     }
 
     public String getId() {
@@ -24,11 +30,20 @@ public class Setor {
         this.id = id;
     }
 
-    public String getSetor() {
-        return setor;
+    public String getNome() {
+        return nome;
     }
 
-    public void setSetor(String setor) {
-        this.setor = setor;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
+
+    public Galpao getGalpao() {
+        return galpao;
+    }
+
+    public void setGalpao(Galpao galpao) {
+        this.galpao = galpao;
+    }
+
 }
