@@ -1,5 +1,8 @@
 package com.example.inventariogalpao.Galpao;
 
+import com.example.inventariogalpao.Item.ItemRepository;
+import com.example.inventariogalpao.Setor.Setor;
+import com.example.inventariogalpao.Setor.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +12,12 @@ import java.util.List;
 public class GalpaoService {
     @Autowired
     private GalpaoRepository galpaoRepository;
+
+    @Autowired
+    private SetorRepository setorRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     public GalpaoService(GalpaoRepository galpaoRepository) {
         this.galpaoRepository = galpaoRepository;
@@ -68,15 +77,20 @@ public class GalpaoService {
 
     // Método para deletar um galpão
     public Galpao deletarGalpao(String id) {
-        // Procura o galpão no banco de dados
         Galpao galpaoExistente = galpaoRepository.findById(id).orElse(null);
-
-        // Se o galpão não existir, lança uma exceção de galpão não encontrado
         if (galpaoExistente == null) {
             throw new RuntimeException("Galpão não cadastrado");
         }
 
-        // Deleta o galpão do banco de dados
+        // Encontrar e deletar setores relacionados
+        List<Setor> setores = setorRepository.findByGalpaoId(id);
+        for (Setor setor : setores) {
+            // Encontrar e deletar itens relacionados ao setor
+            itemRepository.deleteBySetorId(setor.getId());
+        }
+        setorRepository.deleteAll(setores);
+
+        // Deleta o galpão
         galpaoRepository.delete(galpaoExistente);
 
         return galpaoExistente;

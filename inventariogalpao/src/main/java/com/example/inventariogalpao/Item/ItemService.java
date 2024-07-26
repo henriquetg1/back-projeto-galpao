@@ -35,9 +35,14 @@ public class ItemService {
             throw new RuntimeException("Setor não encontrado");
         }
 
-        // Verifica se o item está vazio
+        // Verifica se o nome do item está vazio
         if (item.getNome().isEmpty() || item.getNome() == null) {
-            throw new RuntimeException("Item não pode ser vazio");
+            throw new RuntimeException("Nome do item não pode ser vazio");
+        }
+
+        // Verifica se a posição do item está vazia
+        if (item.getPosicao().isEmpty() || item.getPosicao() == null) {
+            throw new RuntimeException("Posição do item não pode ser vazia");
         }
 
         // Verifica se o item já existe no setor

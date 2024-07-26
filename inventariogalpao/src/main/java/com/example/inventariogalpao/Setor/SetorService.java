@@ -68,20 +68,15 @@ public class SetorService {
 
     // Método para deletar um setor
     public Setor deletarSetor(String id) {
-        // Procura o setor no banco de dados
         Setor setorExistente = setorRepository.findById(id).orElse(null);
-
-        // Se o setor não existir, lança uma exceção
         if (setorExistente == null) {
             throw new RuntimeException("Setor não encontrado");
         }
 
-        // Verifica se existem itens associados ao setor
+        // Encontrar e deletar itens associados ao setor
         List<Item> itens = itemRepository.findBySetorId(id);
-
-        // Se existirem itens associados ao setor, lança uma exceção
         if (!itens.isEmpty()) {
-            throw new RuntimeException("Existem itens associados a este setor");
+            itemRepository.deleteAll(itens);
         }
 
         // Deleta o setor do banco de dados

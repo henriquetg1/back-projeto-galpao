@@ -7,4 +7,7 @@ public interface ItemRepository extends MongoRepository<Item, String> {
     List<Item> findBySetorId(String setorId);
     Item findByNomeAndSetorId(String nome, String setorId);
     List<Item> findByGalpaoId(String galpaoId);
+
+    // DeleteBySetorId
+    void deleteBySetorId(String setorId);
 }
